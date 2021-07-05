@@ -30,11 +30,8 @@ export const AddBook = () => {
     event.preventDefault();
     setErrorVisible(true);
     if (countError() === 0) {
-
       addNewBook({ ...newBook });
-
     }
-
   }
 
   const selectedCategoryId = (categoryId) => {

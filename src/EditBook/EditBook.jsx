@@ -1,127 +1,175 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-
 
 import 'bulma';
 import './EditBook.scss';
 
-import { getCategories } from '../api/category'
+import { getCategories, getCategory } from '../api/category'
 import { updateCurrentBook, getBooks } from '../api/books'
+import { ErrorsPlace } from '../ErrorsPlace'
 
 export const EditBook = () => {
   const location = useLocation();
-  console.log(location.state);
   const { book } = location.state;
   const [categoties, setCategories] = useState([]);
-  const [title, setTitle] = useState(book ? book.title : '');
-  const [author, setAuthor] = useState(book ? book.author : '');
-  const [category, setCategory] = useState(book ? book.category : '');
-  const [isbn, setISBN] = useState(book ? book.isbn : '');
-  const [books, setBooks] = useState([]);
+  const [errorVisible, setErrorVisible] = useState(false)
+  const [editedBook, setEditedBook] = useState({
+    title: book.title,
+    author: book.author,
+    category: book.category,
+    isbn: book.isbn,
+  })
 
-
-  const onTitleChange = event => setTitle(event.target.value);
-  const onAuthorChange = event => setAuthor(event.target.value);
-  const onCategoryChange = event => setCategory(event.target.value);
-  const onISBNChange = event => setISBN(event.target.value);
+  const history = useHistory();
 
   useEffect(() => {
     getCategories()
       .then(data => setCategories(data))
-    getBooks()
-      .then(data => setBooks(data))
-  }, [])
+  }, []);
 
-  const history = useHistory();
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setErrorVisible(true);
+
+    if (countError() === 0) {
+      saveBook(editedBook);
+    }
+  }
+
+  const saveBook = (editedBook) => {
+
+    updateBook({ ...book, ...editedBook });
+    redirect();
+  };
 
   const updateBook = (updatedBook) => {
-    const copy = [...books];
-    const index = books.findIndex(book => book.id === updatedBook.id);
-
-    copy.splice(index, 1, updatedBook);
-    setBooks(copy);
-
     updateCurrentBook(updatedBook);
   }
 
-  const saveBook = (formData) => {
-    updateBook({ ...book, ...formData });
+  const validateForm = () => {
+    const newErrors = {
+      emptyTitle: '',
+      emptyAuthor: '',
+      numberInAuthor: '',
+      noCategory: '',
+      emptyISBN: '',
+      lettersInISBN: '',
+      lengthISBN: '',
+    };
+
+    for (let name in editedBook) {
+      switch (name) {
+        case 'title': newErrors.emptyTitle = editedBook[name] === '' ? `The book title field cannot be blank` : '';
+          break;
+        case 'author':
+          newErrors.emptyAuthor = editedBook[name] === '' ? `The book author field cannot be blank` : '';
+          newErrors.numberInAuthor = editedBook[name].match(/\d+/g) ? `The book author cannot contain numbers` : '';
+          break;
+        case 'category':
+          newErrors.noCategory = editedBook[name] === '' ? `Select book category` : '';
+          break;
+        case 'isbn':
+          newErrors.emptyISBN = editedBook[name] === '' ? `The book ISBN field cannot be blank` : '';
+          newErrors.lettersInISBN = editedBook[name].match(/[a-zA-Z]/g) ? `The book ISBN cannot contain letters` : '';
+          newErrors.lengthISBN = editedBook[name].length === 13 ? '' : `The book ISBN field must contain 13 digits`;
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    return newErrors;
   }
 
-const onSubmit = (event) => {
+  const errors = useMemo(validateForm, [editedBook]);
+
+  const handleChange = (event) => {
     event.preventDefault();
-    saveBook({title, author, category, isbn});
-redirect();
+    const { name, value } = event.target;
+    setEditedBook((current) => ({ ...current, [name]: value }));
   }
 
-  const redirect = () => history.push('/')
+  const countError = () => {
+    let count = 0;
+    for (const key in errors) {
+      if (errors[key].length > 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+
+
+  const redirect = () => history.replace('/')
 
   return (
-<>
-    <form
-      className="AddBook__form"
-      onSubmit={onSubmit}
-    >
-      <input
-        className="input is-small"
-        name="title"
-        type="text"
-        placeholder="Title of book"
-        value={title}
-        onChange={onTitleChange}
-        required
-      />
-      <input
-        className="input is-small"
-        type="text"
-        placeholder="Author of book"
-        value={author}
-        onChange={onAuthorChange}
-        required
-      />
-
-      <select
-        name="category"
-        id="category"
-        className=" select is-small"
-        onChange={onCategoryChange}
-        value={category}
-        required
+    <div className="AddBook">
+      <form
+        className="AddBook__form "
+        onSubmit={onSubmit}
       >
-        <option
-          value="0"
+        <input
+          className="input is-small field is-grouped-centered"
+          name="title"
+          type="text"
+          placeholder="Title of book"
+          value={editedBook.title}
+          onChange={handleChange}
+        />
+        <input
+          className="input is-small field"
+          name="author"
+          type="text"
+          placeholder="Author of book"
+          value={editedBook.author}
+          onChange={handleChange}
+        />
+        <select
+          name="category"
+          id="category"
+          className="AddBook__select select is-small field"
+          onChange={handleChange}
+          value={editedBook.category}
+
         >
-          Select category of book
-        </option>
-        {categoties.map(category => (
           <option
-            value={category.name}
-            key={category.id}
+            value="0"
+            hidden
+            selected
           >
-            {category.name}
+            Select category of book
           </option>
-        ))}
-      </select>
+          {categoties.map(category => (
+            <option
+              value={category.name}
+              key={category.id}
+            >
+              {category.name}
+            </option>
+          ))}
+        </select>
 
-      <input
-        className="input is-small"
-        name="isbn"
-        type="text"
-        placeholder="ISBN of book"
-        value={isbn}
-        onChange={onISBNChange}
-        required
-      />
+        <input
+          className="input is-small field"
+          name="isbn"
+          type="text"
+          placeholder="ISBN of book"
+          value={editedBook.isbn}
+          onChange={handleChange}
+        />
 
-      <button
-        type="submit"
-        className="NewCommentForm__submit-button button"
-      >
-        Save
-      </button>
-    </form>
-            {/* {errorVisible && <ErrorsPlace errors={errors} />} */}
-
-</>
+        <button
+          type="submit"
+          className="AddBook__button button"
+        >
+          Save
+        </button>
+      </form>
+      <div className="AddBook__errors errors">
+        {errorVisible && <ErrorsPlace errors={errors} />}
+      </div>
+    </div>
   );
 };

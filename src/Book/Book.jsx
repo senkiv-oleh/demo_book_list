@@ -5,6 +5,7 @@ import 'bulma';
 import './Book.scss';
 
 export const Book = ({ book, onBookDeleted }) => {
+  
 
   return <tr className="Book" key={book.id}>
     <td>{book.title}</td>
@@ -15,7 +16,7 @@ export const Book = ({ book, onBookDeleted }) => {
       <Link 
         className="Book__button button button--edit"
         to={{
-          pathname: "/editbook/:book.id",
+          pathname: "/editbook",
           state: {
             book,
             isEditing: true,
