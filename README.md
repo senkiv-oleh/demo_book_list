@@ -1,4 +1,5 @@
-[DEMO LINK](https://github.com/senkiv-oleh/react-test-task)
+[DEMO LINK](https://senkiv-oleh.github.io/react-test-task)
+
 [MY FAKE API](https://books-data-base.herokuapp.com)
 
 
