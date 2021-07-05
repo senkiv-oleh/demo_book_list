@@ -1,0 +1,18 @@
+.Book {
+  &__button {
+    margin: 0 5px;
+    background-color: #eee;
+    border: 1px solid grey;
+    height: 30px;
+    width: 100px;
+    
+
+    &:hover {
+      background-color: rgb(221, 242, 247);
+    }
+
+    @media (max-width: 850px ) {
+      margin: 5px;
+    }
+  }
+}

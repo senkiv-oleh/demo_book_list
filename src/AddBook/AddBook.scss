@@ -1,0 +1,42 @@
+.AddBook {
+  display: flex;
+  padding-top: 20px;
+  justify-content: center;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 100px;
+    width: 500px;
+
+  }
+
+  &__select {
+    border-color: #dbdbdb;
+    margin-bottom: 5px;
+
+  }
+  
+
+  
+  &__button {
+    background-color: #eee;
+    border: 1px solid grey;
+    height: 30px;
+
+    &:hover {
+      background-color: rgb(221, 242, 247);
+    }
+
+    @media (max-width: 850px ) {
+      margin: 5px;
+    }
+  }
+
+  &__errors {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    color: red;
+  }
+}
