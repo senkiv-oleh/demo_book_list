@@ -1,4 +1,4 @@
- const BASE_URL = '../../public/api/manifest.json';
+ const BASE_URL = 'http://localhost:3004';
 
 export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
   .then(res => res.json());
