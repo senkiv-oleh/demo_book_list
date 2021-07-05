@@ -1,7 +1,11 @@
- const BASE_URL = 'http://localhost:3004';
+ const BASE_URL = 'https://books-data-base.herokuapp.com';
+
 
 export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
   .then(res => res.json());
+
+  console.log(fetch(`${BASE_URL}/books`)
+)
 
 export const remove = url => request(url, { method: 'DELETE' });
 

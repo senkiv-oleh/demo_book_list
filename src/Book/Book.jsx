@@ -13,7 +13,7 @@ export const Book = ({ book, onBookDeleted }) => {
     <td>{book.isbn}</td>
     <td>
       <Link 
-        className="Book__button bZutton button--edit"
+        className="Book__button button button--edit"
         to={{
           pathname: "/editbook/:book.id",
           state: {

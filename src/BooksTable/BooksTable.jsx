@@ -15,7 +15,7 @@ export const BooksTable = () => {
   useEffect(() => {
     getBooks()
       .then(res => setBooks(res));
-  }, []);
+  }, [books]);
 
   const removeBook = (bookId) => {
     getBookDelete(bookId)
@@ -28,7 +28,7 @@ export const BooksTable = () => {
 
   return (
     <>
-        <table className="BooksTable table is-fullwidth">
+        <table className="BooksTable table  is-striped is-narrow is-hoverable">
         <thead>
           <th className="BooksTable__title">Title</th>
           <th className="BooksTable__title">Author</th>
