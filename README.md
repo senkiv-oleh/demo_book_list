@@ -1,4 +1,4 @@
-[Demo Link](https://senkiv-oleh.github.io/)
+[Demo Link](https://senkiv-oleh.github.io/react-test-task)
 
 # Getting Started with Create React App
 
