@@ -28,7 +28,7 @@ export const BookForm = ({ match }) => {
       .then(data => setBook({ ...data }));
     getCategories()
       .then(data => setCategories(data));
-      
+
   }, [bookId]);
 
   const onSubmit = (event) => {
@@ -51,13 +51,6 @@ export const BookForm = ({ match }) => {
 
   const validateForm = () => {
     const newErrors = {
-      emptyTitle: '',
-      emptyAuthor: '',
-      numberInAuthor: '',
-      noCategory: '',
-      emptyISBN: '',
-      lettersInISBN: '',
-      lengthISBN: '',
     };
 
     for (let name in book) {
@@ -114,7 +107,7 @@ export const BookForm = ({ match }) => {
         action="/book"
       >
         <input
-          className={classNames('input is-small field is-grouped-centered', { 'is-error': errors.emptyTitle !== '' })}
+          className="input is-small field is-grouped-centered"
           name="title"
           type="text"
           placeholder="Title of book"
