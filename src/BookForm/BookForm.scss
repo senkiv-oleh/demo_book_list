@@ -1,4 +1,4 @@
-.EditBook {
+.BookForm {
   display: flex;
   padding-top: 20px;
   justify-content: center;
@@ -6,7 +6,6 @@
   &__form {
     display: flex;
     flex-direction: column;
-    margin-left: 100px;
     width: 500px;
 
   }
@@ -39,4 +38,9 @@
     flex-direction: column;
     color: red;
   }
+}
+
+.is-error {
+    border-color: red;
+
 }

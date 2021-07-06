@@ -4,9 +4,6 @@
 export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
   .then(res => res.json());
 
-  console.log(fetch(`${BASE_URL}/books`)
-)
-
 export const remove = url => request(url, { method: 'DELETE' });
 
 export const post = (url, book) => request(url, {

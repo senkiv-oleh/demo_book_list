@@ -2,6 +2,9 @@ import { request, remove, post, put } from './api';
 
 export const getBooks = () => request(`/books`);
 
+export const getBook = (bookId) => request(`/books/${bookId}`);
+
+
 export const getBookDelete = bookId => remove(`/books/${bookId}`);
 
 export function addBook(book) {

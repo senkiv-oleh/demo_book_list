@@ -3,8 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { Header } from './Header';
 import { Dashboard } from './Dashboard';
-import { AddBook } from './AddBook';
-import { EditBook } from './EditBook';
+import { BookForm } from './BookForm';
 import './App.scss';
 
 const App = () => (
@@ -12,13 +11,13 @@ const App = () => (
     <Header />
     <div className="App">
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/book">
           <Dashboard />
         </Route>
-        <Route path="/addbook" component={AddBook}/>
-        <Route path="/editbook" component={EditBook}/>
+        <Route path="/addbook" component={BookForm}/>
+        <Route exact path="/book/:bookId" component={BookForm}/>
         
-        <Redirect path="/home" to="/" />
+        <Redirect path="/" to="/book" />
       </Switch>
 
     </div>
