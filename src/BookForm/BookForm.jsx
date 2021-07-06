@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
 
 import 'bulma';
@@ -10,7 +9,6 @@ import { updateCurrentBook, getBook, addBook } from '../api/books'
 import { Errors } from '../Errors'
 
 export const BookForm = ({ match }) => {
-
   const [categoties, setCategories] = useState([]);
   const [errorVisible, setErrorVisible] = useState(false)
   const [book, setBook] = useState({
@@ -18,7 +16,7 @@ export const BookForm = ({ match }) => {
     author: '',
     category: '',
     isbn: '',
-  })
+  });
 
   const bookId = match.params.bookId;
   const history = useHistory();
@@ -28,13 +26,11 @@ export const BookForm = ({ match }) => {
       .then(data => setBook({ ...data }));
     getCategories()
       .then(data => setCategories(data));
-
-  }, [bookId]);
+  }, []);
 
   const onSubmit = (event) => {
     event.preventDefault();
     setErrorVisible(true);
-
     if (countError() === 0) {
       saveBook(book);
     }
@@ -45,24 +41,31 @@ export const BookForm = ({ match }) => {
       updateCurrentBook(book);
     } else {
       addBook(book);
-    }   
-     redirect();
+    }
+    redirect();
   };
 
   const validateForm = () => {
     const newErrors = {
+      emptyTitle: !book.title ? 'The book title field cannot be blank' : '',
+      emptyAuthor: !book.author ? 'The book author field cannot be blank' : '',
+      numberInAuthor: '',
+      noCategory: !book.category ? 'Book category not selected' : '',
+      emptyISBN: !book.isbn ? 'The book ISBN field cannot be blank' : '',
+      lettersInISBN: '',
+      lengthISBN: '',
     };
-
+    console.log(book.title);
     for (let name in book) {
       switch (name) {
-        case 'title': newErrors.emptyTitle = book[name].length === 0 ? `The book title field cannot be blank` : '';
+        case 'title': newErrors.emptyTitle = book[name] === '' ? `The book title field cannot be blank` : '';
           break;
         case 'author':
           newErrors.emptyAuthor = book[name] === '' ? `The book author field cannot be blank` : '';
           newErrors.numberInAuthor = book[name].match(/\d+/g) ? `The book author cannot contain numbers` : '';
           break;
         case 'category':
-          newErrors.noCategory = book[name] === '' ? `Select book category` : '';
+          newErrors.noCategory = book[name] === '' ? `Book category not selected` : '';
           break;
         case 'isbn':
           newErrors.emptyISBN = book[name] === '' ? `The book ISBN field cannot be blank` : '';
@@ -74,11 +77,10 @@ export const BookForm = ({ match }) => {
           break;
       }
     }
-
     return newErrors;
   }
 
-  const errors = useMemo(validateForm, [book]);
+  const errors = useMemo(validateForm, [book])
 
   const countError = () => {
     let count = 0;
@@ -89,6 +91,7 @@ export const BookForm = ({ match }) => {
     }
     return count;
   }
+
   const handleChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -104,7 +107,6 @@ export const BookForm = ({ match }) => {
       <form
         className="BookForm__form "
         onSubmit={onSubmit}
-        action="/book"
       >
         <input
           className="input is-small field is-grouped-centered"
@@ -121,6 +123,7 @@ export const BookForm = ({ match }) => {
           placeholder="Author of book"
           value={book.author}
           onChange={handleChange}
+
         />
         <select
           name="category"
@@ -128,7 +131,6 @@ export const BookForm = ({ match }) => {
           className="BookForm__select select is-small field"
           onChange={handleChange}
           value={book.category}
-
         >
           <option
             value="0"
