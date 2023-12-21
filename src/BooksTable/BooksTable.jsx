@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { Book } from '../Book';
-import { getBooks, getBookDelete } from '../api/books';
+import {getBooks, getBookDelete} from '../api/books';
 
 import 'bulma';
 import './BooksTable.scss';
@@ -11,7 +11,7 @@ export const BooksTable = () => {
 
   useEffect(() => {
     getBooks()
-      .then(res => setBooks(res));
+      .then(res => setBooks([...res]));
   }, [books]);
 
   const removeBook = (bookId) => {
