@@ -36,7 +36,9 @@ export const BooksTable = () => {
           </tr>
         </thead>
         <tbody>
-          {books.map(book => <Book book={book} books={books} onBookDeleted={removeBook} key={book.id} />)}
+          {books.map(book =>
+            <Book book={book} books={books} onBookDeleted={removeBook} key={book.id} />
+          )}
         </tbody>
       </table>
     </>

@@ -37,5 +37,5 @@ export const Book = ({ book, onBookDeleted }) => {
   
 
 Book.propTypes = {
-  book: PropTypes.arrayOf().isRequired,
+  book: PropTypes.object.isRequired,
 };

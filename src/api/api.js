@@ -1,4 +1,4 @@
- const BASE_URL = 'https://books-data-base-7d76bee0ddf1.herokuapp.com/';
+const BASE_URL = 'https://books-database-36ba8aef5296.herokuapp.com';
 
 
 export const request = (url, options) => fetch(`${BASE_URL}${url}`, options)
