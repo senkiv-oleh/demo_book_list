@@ -107,7 +107,7 @@ export const BookForm = ({ match }) => {
   };
 
   const redirect = () => {
-    window.open('/book', '_self');
+    history.goBack()
   };
 
   return (
