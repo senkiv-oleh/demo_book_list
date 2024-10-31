@@ -1,7 +1,7 @@
 import React from 'react';
 
 import 'bulma';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export const Header = () => (
   <nav className="navbar">

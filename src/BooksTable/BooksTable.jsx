@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-
-import { Book } from '../Book';
-import { getBooks, getBookDelete } from '../api/books';
+import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
+import {Book} from '../Book';
+import {getBooks, getBookDelete} from '../api/books';
 
 import 'bulma';
 import './BooksTable.scss';
@@ -11,17 +11,17 @@ export const BooksTable = () => {
 
   useEffect(() => {
     getBooks()
-      .then(res => setBooks(res));
-  }, [books]);
+        .then((res) => setBooks(res));
+  }, []);
 
   const removeBook = (bookId) => {
     getBookDelete(bookId)
-      .then(() => {
-        setBooks(carrentList => (
-          carrentList.filter(books => books.id !== bookId)
-        ))
-      })
-  }
+        .then(() => {
+          setBooks((carrentList) => (
+            carrentList.filter((books) => books.id !== bookId)
+          ));
+        });
+  };
 
   return (
     <>
@@ -36,7 +36,13 @@ export const BooksTable = () => {
           </tr>
         </thead>
         <tbody>
-          {books.map(book => <Book book={book} books={books} onBookDeleted={removeBook} key={book.id} />)}
+          {books.map((book) =>
+            <Book
+              book={book}
+              books={books}
+              onBookDeleted={removeBook}
+              key={book.id}
+            />)}
         </tbody>
       </table>
     </>
@@ -44,3 +50,12 @@ export const BooksTable = () => {
   );
 };
 
+BooksTable.propTypes = {
+  books: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    isbn: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  })),
+};

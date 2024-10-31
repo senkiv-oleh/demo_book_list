@@ -4,13 +4,13 @@ import { useHistory } from 'react-router-dom';
 import 'bulma';
 import './BookForm.scss';
 
-import { getCategories } from '../api/category'
-import { updateCurrentBook, getBook, addBook } from '../api/books'
-import { Errors } from '../Errors'
+import { getCategories } from '../api/category';
+import { updateCurrentBook, getBook, addBook } from '../api/books';
+import { Errors } from '../Errors';
 
 export const BookForm = ({ match }) => {
   const [categoties, setCategories] = useState([]);
-  const [errorVisible, setErrorVisible] = useState(false)
+  const [errorVisible, setErrorVisible] = useState(false);
   const [book, setBook] = useState({
     title: '',
     author: '',
@@ -19,22 +19,23 @@ export const BookForm = ({ match }) => {
   });
 
   const bookId = match.params.bookId;
-  const history = useHistory();
+  useHistory();
 
   useEffect(() => {
     getBook(bookId)
-      .then(data => setBook({ ...data }));
+      .then((data) => setBook({ ...data }));
     getCategories()
-      .then(data => setCategories(data));
+      .then((data) => setCategories(data));
   }, []);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setErrorVisible(true);
     if (countError() === 0) {
       saveBook(book);
+    } else {
+      setErrorVisible(true);
     }
-  }
+  };
 
   const saveBook = (book) => {
     if (bookId) {
@@ -42,7 +43,7 @@ export const BookForm = ({ match }) => {
     } else {
       addBook(book);
     }
-    redirect();
+    setTimeout(() => redirect(), 1000);
   };
 
   const validateForm = () => {
@@ -55,10 +56,12 @@ export const BookForm = ({ match }) => {
       lettersInISBN: '',
       lengthISBN: '',
     };
-    console.log(book.title);
-    for (let name in book) {
+
+    for (const name in book) {
       switch (name) {
-        case 'title': newErrors.emptyTitle = book[name] === '' ? `The book title field cannot be blank` : '';
+        case 'title': newErrors.emptyTitle = book[name] === '' ?
+          `The book title field cannot be blank` :
+          '';
           break;
         case 'author':
           newErrors.emptyAuthor = book[name] === '' ? `The book author field cannot be blank` : '';
@@ -69,38 +72,43 @@ export const BookForm = ({ match }) => {
           break;
         case 'isbn':
           newErrors.emptyISBN = book[name] === '' ? `The book ISBN field cannot be blank` : '';
-          newErrors.lettersInISBN = book[name].match(/[a-zA-Z]/g) ? `The book ISBN cannot contain letters` : '';
-          newErrors.lengthISBN = book[name].length === 13 ? '' : `The book ISBN field must contain 13 digits`;
+          newErrors.lettersInISBN = book[name].match(/\D/g) ? `The ISBN cannot contain letters` : '';
+          newErrors.lengthISBN = book[name].length === 13
+            ? ''
+            : `The book ISBN field must contain 13 digits`;
           break;
 
         default:
           break;
       }
     }
-    return newErrors;
-  }
 
-  const errors = useMemo(validateForm, [book])
+    return newErrors;
+  };
+
+  const errors = useMemo(validateForm, [book]);
 
   const countError = () => {
     let count = 0;
+
     for (const key in errors) {
       if (errors[key].length > 0) {
         count++;
       }
     }
+
     return count;
-  }
+  };
 
   const handleChange = (event) => {
-    event.preventDefault();
     const { name, value } = event.target;
+
     setBook((current) => ({ ...current, [name]: value }));
-  }
+  };
 
   const redirect = () => {
-    history.replace('/book')
-  }
+    window.open('/book', '_self');
+  };
 
   return (
     <div className="BookForm">
@@ -123,7 +131,6 @@ export const BookForm = ({ match }) => {
           placeholder="Author of book"
           value={book.author}
           onChange={handleChange}
-
         />
         <select
           name="category"
@@ -139,7 +146,7 @@ export const BookForm = ({ match }) => {
           >
             Select category of book
           </option>
-          {categoties.map(category => (
+          {categoties.map((category) => (
             <option
               value={category.name}
               key={category.id}

@@ -1,4 +1,6 @@
-import { request } from './api';
+import {
+  request,
+} from './api';
 
 export const getCategories = () => request(`/categories`);
 
