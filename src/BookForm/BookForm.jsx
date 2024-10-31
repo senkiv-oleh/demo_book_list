@@ -19,7 +19,7 @@ export const BookForm = ({ match }) => {
   });
 
   const bookId = match.params.bookId;
-  useHistory();
+  const history = useHistory();
 
   useEffect(() => {
     getBook(bookId)
